@@ -6,7 +6,7 @@ A Semantic Web project modeling the logistics of maritime passenger transport. T
 
 The following graph illustrates the class hierarchy and property relationships (generated via Corese):
 
-![Ontology Graph](ontology_visualization.png)
+![Ontology Graph](Ontology_visualization.png)
 
 ## 🛠 Technical Features
 
