@@ -1,0 +1,35 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix voyager: <http://voyager.cruise/schema#>.
+@prefix : <http://voyager.cruise/data#>.
+
+:PortNice a voyager:Port;
+    rdfs:label "Port Nice"@en.
+
+:PortBastia a voyager:Port;
+    rdfs:label "Port Bastia"@en.
+
+:Baila a voyager:AnimalPassenger;
+    rdfs:label "Baila"@en.
+
+:SuiteCase a voyager:Luggage;
+    rdfs:label "Melvin 23kg Suitecase"@en.
+
+:HandLuggage a voyager:Luggage;
+    rdfs:label "Melvin 7kg Hand Luggage"@en.
+
+:Backpack a voyager:Luggage;
+    rdfs:label "Melvin 3kg Backpack"@en.
+
+:Melvin a voyager:AdultPassenger;
+    voyager:ownsLuggage :SuiteCase, :HandLuggage, :Backpack;
+    voyager:ownsAnimal :Baila.
+
+:Voyager a voyager:Cruise;
+    rdfs:label "Voyager XI"@en;
+    voyager:departsFrom :PortNice;
+    voyager:arrivesAt :PortBastia;
+    voyager:transportsPassenger :Melvin;
+    voyager:transportsAnimal :Baila;
+    voyager:transportsLuggage :SuiteCase, :HandLuggage, :Backpack.

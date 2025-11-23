@@ -1,0 +1,154 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:  <http://www.w3.org/2002/07/owl#> .
+@prefix : <http://voyager.cruise/schema#> .
+
+:Something a rdfs:Class;
+    rdfs:label "Something"@en;
+    rdfs:comment "Defines some place, name or a thing"@en.
+
+:AbstractThing a rdfs:Class;
+    rdfs:label "AbstractThing"@en;
+    rdfs:comment "Defines an Abstract idea or a thing"@en;
+    rdfs:subClassOf :Something.
+
+:LivingThing  a rdfs:Class;
+    rdfs:label "Living  Thing"@en;
+    rdfs:comment "Defines a thing which is living"@en;
+    rdfs:subClassOf :Something.
+
+:InertThing a rdfs:Class;
+    rdfs:label "Inert Thing"@en;
+    rdfs:comment "Defines a thing that is not active or moving"@en;
+    rdfs:subClassOf :Something.
+
+:Animal a rdfs:Class;
+    rdfs:label "Animal"@en;
+    rdfs:comment "Defines a living thing which is Animal"@en;
+    rdfs:subClassOf :LivingThing.
+
+:Person a rdfs:Class;
+    rdfs:label "Person"@en;
+    rdfs:comment "Defines a human being"@en;
+    rdfs:subClassOf :Animal.
+
+:Object a rdfs:Class;
+    rdfs:label "Object"@en;
+    rdfs:comment "Defines an object"@en;
+    rdfs:subClassOf :InertThing.
+
+:Passenger a rdfs:Class;
+    rdfs:label "Passenger"@en;
+    rdfs:comment "A living thing which travels"@en;
+    rdfs:subClassOf :Animal.
+
+:AdultPassenger a rdfs:Class;
+    rdfs:label "Adult Passenger"@en;
+    rdfs:comment "A passenger who is an adult"@en;
+    owl:disjointWith :ChildPassenger, :AnimalPassenger;
+    rdfs:subClassOf :Passenger, :Person.
+
+:ChildPassenger a rdfs:Class;
+    rdfs:label "Child Passenger"@en;
+    rdfs:comment "A passenger who is a child"@en;
+    owl:disjointWith :AdultPassenger, :AnimalPassenger;
+    rdfs:subClassOf :Passenger, :Person.
+
+:AnimalPassenger a rdfs:Class;
+    rdfs:label "Animal Passenger"@en;
+    rdfs:comment "An animal which is a passenger"@en;
+    owl:disjointWith :AdultPassenger, :ChildPassenger;
+    rdfs:subClassOf :Passenger.
+
+:Luggage a rdfs:Class;
+    rdfs:label "Luggage"@en;
+    rdfs:comment "An object carried by a person"@en;
+    rdfs:subClassOf :Object.
+
+:Cruise a rdfs:Class;
+    rdfs:label "Cruise"@en;
+    rdfs:comment "An object which carries passengers and travels in sea"@en;
+    rdfs:subClassOf :Object;
+    rdfs:subClassOf [
+        a owl:Restriction;
+        owl:onProperty :departsFrom;
+        owl:someValuesFrom :Port
+    ];
+    rdfs:subClassOf [
+        a owl:Restriction;
+        owl:onProperty :arrivesAt;
+        owl:someValuesFrom :Port
+    ].
+
+:Port a rdfs:Class;
+    rdfs:label "Port"@en;
+    rdfs:comment "An Object where Cruise are anchored"@en;
+    rdfs:subClassOf :Object.
+
+:transports a rdf:Property;
+    rdfs:label "transports"@en;
+    rdfs:comment "A generic property of a vehicle which transports something"@en;
+    rdfs:domain :Cruise;
+    rdfs:range [
+        a owl:Class;
+        owl:unionOf (:Passenger :Luggage)
+    ].
+
+:transportsPassenger a rdf:Property;
+    rdfs:label "transportsPassenger"@en;
+    rdfs:comment "A property of a vehicle which transports a Person"@en;
+    rdfs:domain :Cruise;
+    rdfs:range [
+        a owl:Class;
+        owl:unionOf (:AdultPassenger :ChildPassenger)
+    ];
+    rdfs:subPropertyOf :transports.
+
+:transportsLuggage a rdf:Property;
+    rdfs:label "transportsLuggage"@en;
+    rdfs:comment "A property of a vehicle which transports an object"@en;
+    rdfs:domain :Cruise;
+    rdfs:range :Luggage;
+    rdfs:subPropertyOf :transports.
+
+:transportsAnimal a rdf:Property;
+    rdfs:label "transportsAnimal"@en;
+    rdfs:comment "A property of a vehicle which transports an Animal Passenger"@en;
+    rdfs:domain :Cruise;
+    rdfs:range :AnimalPassenger;
+    rdfs:subPropertyOf :transports.
+
+:owns a rdf:Property;
+    rdfs:label "owns"@en;
+    rdfs:comment "A property of a Person to own some object or thing"@en;
+    rdfs:domain :Person;
+    rdfs:range [
+        a owl:Class;
+        owl:unionOf (:AnimalPassenger :Luggage)
+    ].
+
+:ownsLuggage a rdf:Property;
+    rdfs:label "ownsLuggage"@en;
+    rdfs:comment "A property of a Person to own a Luggage"@en;
+    rdfs:domain :Person;
+    rdfs:range :Luggage;
+    rdfs:subPropertyOf :owns.
+
+:ownsAnimal a rdf:Property;
+    rdfs:label "ownsAnimal"@en;
+    rdfs:comment "A property of a Person to own an animal"@en;
+    rdfs:domain :Person;
+    rdfs:range :AnimalPassenger;
+    rdfs:subPropertyOf :owns.
+
+:departsFrom a rdf:Property, owl:FunctionalProperty;
+    rdfs:label "departsFrom"@en;
+    rdfs:comment "A property of a Cruise to show from where it departs"@en;
+    rdfs:domain :Cruise;
+    rdfs:range :Port.
+
+:arrivesAt a rdf:Property, owl:FunctionalProperty;
+    rdfs:label "arrivesAt"@en;
+    rdfs:comment "A property of a Cruise to show where it reaches"@en;
+    rdfs:domain :Cruise;
+    rdfs:range :Port.
